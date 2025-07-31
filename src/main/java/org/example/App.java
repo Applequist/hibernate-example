@@ -25,13 +25,7 @@ public class App {
         final BootstrapServiceRegistry bootstrapRegistry = new BootstrapServiceRegistryBuilder().build();
 
         Configuration cfg = new Configuration(bootstrapRegistry)
-                .setProperty("hibernate.connection.driver_class", "org.sqlite.JDBC")
-                .setProperty("hibernate.connection.url", "jdbc:sqlite:/home/bdesoutter/dev/repositories/hibernate/identifier.sqlite")
-                .setProperty("hibernate.connection.pool_size", "5")
-                .setProperty("hibernate.dialect", "org.hibernate.community.dialect.SQLiteDialect")
-                .setProperty("hibernate.show_sql", "true")
-                .setProperty("hibernate.format_sql", "true")
-                .setProperty("hibernate.hbm2ddl.auto", "update")
+                .configure()
                 .addAnnotatedClass(User.class);
 
         // A thread-safe and immutable representation of the mapping of the application
