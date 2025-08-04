@@ -14,7 +14,15 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.target>17</maven.compiler.target>
+    <hibernate.version>7.0.8.Final</hibernate.version>
   </properties>
+
+  <repositories>
+    <repository>
+      <id>maven</id>
+      <url>https://repo.maven.apache.org/maven2</url>
+    </repository>
+  </repositories>
 
   <dependencyManagement>
     <dependencies>
@@ -28,7 +36,7 @@
       <dependency>
         <groupId>org.hibernate.orm</groupId>
         <artifactId>hibernate-platform</artifactId>
-        <version>7.0.8.Final</version>
+        <version>${hibernate.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -41,6 +49,10 @@
       <artifactId>hibernate-core</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.hibernate.orm</groupId>
+      <artifactId>hibernate-processor</artifactId>
+    </dependency>
+    <dependency>
       <groupId>jakarta.transaction</groupId>
       <artifactId>jakarta.transaction-api</artifactId>
     </dependency>
@@ -50,9 +62,9 @@
       <version>3.36.0.3</version>
     </dependency>
     <dependency>
-      <groupId>org.hibernate</groupId>
+      <groupId>org.hibernate.orm</groupId>
       <artifactId>hibernate-community-dialects</artifactId>
-      <version>7.0.8.Final</version>
+      <version>${hibernate.version}</version>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
@@ -70,6 +82,24 @@
   <build>
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
+        <plugin>
+          <groupId>org.hibernate.orm.tooling</groupId>
+          <artifactId>hibernate-enhance-maven-plugin</artifactId>
+          <version>${hibernate.version}</version>
+          <executions>
+            <execution>
+              <configuration>
+                <failOnError>true</failOnError>
+                <enableLazyInitialization>true</enableLazyInitialization>
+                <enableDirtyTracking>true</enableDirtyTracking>
+                <enableAssociationManagement>true</enableAssociationManagement>
+              </configuration>
+              <goals>
+                <goal>enhance</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
         <!-- clean lifecycle, see https://maven.apache.org/ref/current/maven-core/lifecycles.html#clean_Lifecycle -->
         <plugin>
           <artifactId>maven-clean-plugin</artifactId>
@@ -83,6 +113,15 @@
         <plugin>
           <artifactId>maven-compiler-plugin</artifactId>
           <version>3.13.0</version>
+          <configuration>
+            <annotationProcessorPaths>
+              <path>
+                <groupId>org.hibernate.orm</groupId>
+                <artifactId>hibernate-processor</artifactId>
+                <version>${hibernate.version}</version>
+              </path>
+            </annotationProcessorPaths>
+          </configuration>
         </plugin>
         <plugin>
           <artifactId>maven-surefire-plugin</artifactId>
@@ -111,5 +150,15 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <configuration>
+          <source>9</source>
+          <target>9</target>
+        </configuration>
+      </plugin>
+    </plugins>
   </build>
 </project>

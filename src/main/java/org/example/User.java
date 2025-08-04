@@ -2,6 +2,10 @@ package org.example;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 /**
  * An entity must:
  * - be a non-final class,
@@ -19,6 +23,11 @@ public class User {
 
     @Basic(optional = false)
     private String email;
+
+    @OneToMany(
+            mappedBy = Toy_.OWNER
+    )
+    private Set<Toy> favoriteToys = new HashSet<>();
 
     public User(String name, String email) {
         this.name = name;
@@ -46,8 +55,12 @@ public class User {
         this.email = email;
     }
 
+    public Set<Toy> getFavoriteToys() {
+        return favoriteToys;
+    }
+
     @Override
     public String toString() {
-        return String.format("User(id = %d, name = %s, email = %s)", id, name, email);
+        return String.format("User(id = %d, name = %s, email = %s, favorite_toys = '%s')", id, name, email, favoriteToys.stream().map(Toy::getName).collect(Collectors.joining(", ")));
     }
 }
