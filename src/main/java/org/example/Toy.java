@@ -20,7 +20,7 @@ public class Toy {
 
     public Toy() {}
 
-    public Toy(String name, int minAge, User owner) {
+    public Toy(String name, int minAge,  User owner) {
         this.name = name;
         this.minAge = minAge;
         this.owner = owner;

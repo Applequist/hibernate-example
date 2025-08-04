@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static jakarta.persistence.CascadeType.*;
+
 /**
  * An entity must:
  * - be a non-final class,
@@ -25,7 +27,8 @@ public class User {
     private String email;
 
     @OneToMany(
-            mappedBy = Toy_.OWNER
+            mappedBy = Toy_.OWNER,
+            cascade = PERSIST
     )
     private Set<Toy> favoriteToys = new HashSet<>();
 

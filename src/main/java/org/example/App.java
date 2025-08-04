@@ -56,14 +56,11 @@ public class App {
             tx.begin();
 
             User john = new User("John Doe", "john.doe@gmail.com");
+            john.getFavoriteToys().addAll(List.of(
+                new Toy("Buzz Lightning", 5, john),
+                new Toy("GameBoy", 5, john)
+            ));
             em.persist(john);  // No actual insertion here. Merely schedule an insertion into the db.
-
-            Toy buzz = new Toy("Buzz Lightning", 5, john);
-            em.persist(buzz);
-            Toy gb = new Toy("GameBoy", 5, john);
-            em.persist(gb);
-
-            john.getFavoriteToys().addAll(List.of(buzz, gb));
 
             tx.commit();
 
