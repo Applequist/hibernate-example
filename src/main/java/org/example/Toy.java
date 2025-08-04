@@ -2,7 +2,8 @@ package org.example;
 
 import jakarta.persistence.*;
 
-@Entity(name = "TOYS")
+@Entity
+@Table(name = "TOYS")
 public class Toy {
 
     @Id
@@ -15,15 +16,18 @@ public class Toy {
     @Basic(optional = false)
     private int minAge;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY,
+            cascade = CascadeType.ALL,
+            optional = false)
     private User owner;
 
-    public Toy() {}
-
-    public Toy(String name, int minAge,  User owner) {
+    public Toy(String name, int minAge, User owner) {
         this.name = name;
         this.minAge = minAge;
         this.owner = owner;
+    }
+
+    public Toy() {
     }
 
     public Long getId() {
@@ -52,5 +56,15 @@ public class Toy {
 
     public void setOwner(User owner) {
         this.owner = owner;
+    }
+
+    @Override
+    public String toString() {
+        return "Toy{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", minAge=" + minAge +
+                ", owner=" + owner +
+                '}';
     }
 }
