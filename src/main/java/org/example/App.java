@@ -1,10 +1,7 @@
 package org.example;
 
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.PersistenceConfiguration;
+import jakarta.persistence.*;
 
 import java.util.List;
 
@@ -31,6 +28,7 @@ public class App {
 
     public void run() {
         populateDb();
+        readDb();
         emf.close();
     }
 
@@ -73,6 +71,16 @@ public class App {
         } finally {
             em.close();
         }
+    }
+
+    private void readDb() {
+        emf.runInTransaction(em -> {
+            final EntityGraph<User> userGraph = em.createEntityGraph(User.class);
+            userGraph.addSubgraph(User_.FAVORITE_TOYS);
+            final User john = em.find(userGraph, 1);
+            System.out.printf("Found %s\n", john);
+
+        });
     }
 
 }
